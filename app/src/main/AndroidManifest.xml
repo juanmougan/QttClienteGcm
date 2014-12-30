@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="ar.com.ceiucaweb.qtt.gcm.cliente" >
+
+    <!-- Mandar el registration ID al servidor GCM -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <!-- Necesito este permiso para usar el WakefulBroadcastReceiver -->
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <!-- Para registrarse y recibir mensajes -->
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+
+    <!-- Para que sólo nuestra aplicación reciba los mensajes -->
+    <permission android:name="ar.com.ceiucaweb.qtt.gcm.cliente.permission.C2D_MESSAGE"
+        android:protectionLevel="signature" />
+    <uses-permission android:name="ar.com.ceiucaweb.qtt.gcm.cliente.permission.C2D_MESSAGE" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!--
+          WakefulBroadcastReceiver that will receive intents from GCM
+          services and hand them to the custom IntentService.
+
+          The com.google.android.c2dm.permission.SEND permission is necessary
+          so only GCM services can send data messages for the app.
+        -->
+        <receiver
+            android:name=".gcm.GcmBroadcastReceiver"
+            android:permission="com.google.android.c2dm.permission.SEND" >
+            <intent-filter>
+                <!-- Receives the actual messages. -->
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <!-- TODO ver si este package esta bien -->
+                <category android:name="ar.com.ceiucaweb.qtt" />
+            </intent-filter>
+        </receiver>
+        <service android:name=".gcm.GcmIntentService" />
+
+    </application>
+
+</manifest>
